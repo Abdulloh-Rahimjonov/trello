@@ -22,7 +22,7 @@
             text-align: center;
             width: 300px;
         }
-        input[type="text"] {
+        input[type="text"], input[type="password"] {
             font-size: 24px;
             letter-spacing: 12px;
             padding: 10px;
@@ -55,10 +55,13 @@
 <body>
 <div class="verify-container">
     <h2>Verification</h2>
-    <form action="/verifiedd" method="get">
-        <input type="hidden" th:name="_csrf" th:value="${_csrf.token}">
+    <form action="/verified" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
         <input type="hidden" name="randomCode" th:value="${randomCode}">
-        <input type="hidden" th:value="${userDTO}">
+        <input type="hidden" name="username" th:value="${userDTO.username}">
+        <input type="hidden" name="name" th:value="${userDTO.name}">
+        <input type="hidden" name="password" th:value="${userDTO.password}">
+        <input type="hidden" name="password2" th:value="${userDTO.password2}">
         <input type="text" name="userCode" maxlength="6" required placeholder="______">
         <button type="submit">Tasdiqlash</button>
     </form>

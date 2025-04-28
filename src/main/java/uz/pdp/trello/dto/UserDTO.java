@@ -1,13 +1,13 @@
 package uz.pdp.trello.dto;
 
-import lombok.Value;
+import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
-@Value
+@Data
 public class UserDTO {
-    String email;
-    String username;
-    String password;
-    String password2;
-    byte[] photo;
-
+    private String name;
+    private String username;
+    private String password;
+    private String password2;
+    private MultipartFile photo;
 }

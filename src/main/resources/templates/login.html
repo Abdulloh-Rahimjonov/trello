@@ -7,10 +7,11 @@
 <body>
 <form action="/login" method="post">
     <input type="email" name="username" placeholder="email">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
     <input type="password" name="password" placeholder="password">
     <button>login</button>
 </form>
 
-<a href="/register">Register</a> <!--Iskandaraka siz shetdan ob ketas-->
+<a href="/register">Register</a>
 </body>
 </html>
