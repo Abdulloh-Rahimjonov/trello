@@ -20,7 +20,8 @@ public class SecurityController {
                                     "/register",
                                     "/login",
                                     "/logout",
-                                    "verification"
+                                    "/verified",
+                                    "/verifiedPage"
                             ).permitAll()
 //                            .requestMatchers("", "", "").hasRole("ADMIN")
                             .anyRequest().authenticated();
