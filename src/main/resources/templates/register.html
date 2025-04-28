@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <style>
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #1e1e2f;
+            --text-color: #f0f0f0;
+            --border-color: #444;
+            --error-color: #ff6b6b;
+            --success-color: #2ed573;
+            --background-color: #12121c;
+            --card-background: #1a1a2e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        form {
+            background: var(--card-background);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 450px;
+            transition: transform 0.3s ease;
+        }
+
+        form:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #2a2a3d;
+            color: var(--text-color);
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.3);
+        }
+
+        .image-upload {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        #photoPreview {
+            cursor: pointer;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border: 2px dashed var(--border-color);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        #photoPreview:hover {
+            border-color: var(--primary-color);
+            transform: scale(1.02);
+        }
+
+        .image-hint {
+            display: block;
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        button[type="submit"] {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #3a56d4;
+        }
+
+        .login-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .login-link:hover {
+            color: #627cff;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            form {
+                padding: 20px;
+            }
+
+            #photoPreview {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<form action="/verifiedPage" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    <h1>Create Account</h1>
+
+    <input type="text" name="username" placeholder="Username" required><br>
+    <input type="text" name="email" placeholder="Email" required><br>
+    <input type="password" name="password" placeholder="Password" required><br>
+    <input type="password" name="password2" placeholder="Confirm Password" required><br>
+
+    <div class="form-group image-upload">
+        <input required  type="file" id="photoInput" name="photo" accept="image/*" style="display: none;">
+        <img id="photoPreview" src="/picture/rasm.jpg" alt="Profile image preview">
+        <span class="image-hint">Click or drag image to upload</span>
+    </div>
+
+    <button type="submit">Register</button>
+</form>
+
+<script>
+    const photoInput = document.getElementById('photoInput');
+    const photoPreview = document.getElementById('photoPreview');
+
+
+    photoPreview.addEventListener('click', () => photoInput.click());
+
+    photoInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = e => {
+            photoPreview.src = e.target.result;
+            photoPreview.style.borderStyle = 'solid';
+            photoPreview.style.borderColor = 'var(--primary-color)';
+        };
+        reader.readAsDataURL(file);
+    });
+
+    photoPreview.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        photoPreview.style.borderColor = 'var(--primary-color)';
+        photoPreview.style.backgroundColor = 'rgba(74, 107, 255, 0.1)';
+    });
+
+    photoPreview.addEventListener('dragleave', () => {
+        photoPreview.style.borderColor = 'var(--border-color)';
+        photoPreview.style.backgroundColor = 'transparent';
+    });
+
+    photoPreview.addEventListener('drop', (e) => {
+        e.preventDefault();
+        photoPreview.style.borderColor = 'var(--primary-color)';
+        photoPreview.style.backgroundColor = 'transparent';
+
+        if (e.dataTransfer.files.length) {
+            photoInput.files = e.dataTransfer.files;
+            const event = new Event('change');
+            photoInput.dispatchEvent(event);
+        }
+    });
+</script>
+</body>
+</html>
