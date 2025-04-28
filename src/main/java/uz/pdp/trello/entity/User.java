@@ -9,7 +9,10 @@ import lombok.*;
 @Entity
 @Builder
 public class User {
-
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String username;
+
+
 }
