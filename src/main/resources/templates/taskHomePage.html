@@ -203,12 +203,26 @@
 <body>
 
 <div sec:authorize="isAuthenticated()">
+
     <a sec:authorize="hasRole('ROLE_ADMIN')" href="/admin">User CRUD</a>
     <a sec:authorize="hasRole('ROLE_ADMIN')" href="/addStatus">Add Status</a>
     <a sec:authorize="hasRole('ROLE_ADMIN')" href="/manageOrders">Manage Orders</a>
+
     <a sec:authorize="hasRole('ROLE_MAINTAINER')" href="/addStatus">Add Status</a>
     <a sec:authorize="hasRole('ROLE_MAINTAINER')" href="/manageOrders">Manage Orders</a>
+
+    <form sec:authorize="hasRole('ROLE_MAINTAINER')" action="/task/addTaskPage" method="get">
+        <input type="hidden" name="userId" th:value="${user.id}">
+        <button type="submit">Add Task</button>
+    </form>
+
+    <form sec:authorize="hasRole('ROLE_ADMIN')" action="/task/addTaskPage" method="get">
+        <input type="hidden" name="userId" th:value="${user.id}">
+        <button type="submit">Add Task</button>
+    </form>
+
 </div>
+
 
 <div class="status-container">
     <div class="status-column" th:each="status :${statuses}">

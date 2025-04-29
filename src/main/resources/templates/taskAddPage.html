@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Task</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" />
+</head>
+<body class="container mt-5">
+
+<h2 class="mb-4">Add New Task</h2>
+
+<form action="/task/addTask" method="post" enctype="multipart/form-data" >
+
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
+    <input type="hidden" name="userId" th:value="${userId}">
+    <!-- Title -->
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" name="title"  class="form-control" id="title" placeholder="Enter task title">
+    </div>
+
+    <!-- Attachment (photo) -->
+    <div class="mb-3">
+        <label for="photo" class="form-label">Photo (Attachment)</label>
+        <input type="file" id="photo" name="photo">
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn btn-primary">Save Task</button>
+</form>
+
+</body>
+</html>
