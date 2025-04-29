@@ -1,0 +1,28 @@
+package uz.pdp.trello;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+import uz.pdp.trello.entity.Role;
+import uz.pdp.trello.entity.enums.Roles;
+import uz.pdp.trello.repo.RoleRepository;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@Component
+public class Runner implements CommandLineRunner {
+
+    private final RoleRepository roleRepository;
+
+    @Override
+    public void run(String... args) throws Exception {
+        List<Role> all = roleRepository.findAll();
+        if (all.isEmpty()) {
+            all.add(new Role(null, Roles.PROGRAMMER.name()));
+            all.add(new Role(null, Roles.ADMIN.name()));
+            all.add(new Role(null, Roles.MAINTAINER.name()));
+            roleRepository.saveAll(all);
+        }
+    }
+}
