@@ -1,4 +1,4 @@
-package uz.pdp.trello;
+package uz.pdp.trello.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

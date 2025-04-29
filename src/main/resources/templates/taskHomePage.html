@@ -233,8 +233,8 @@
                 <img th:if="${task.attachment != null}" th:src="@{/attachment/{id}(id=${task.attachment.id})}"
                      alt="Task image">
                 <div sec:authorize="isAuthenticated()">
-                    <a class="edit-btn" sec:authorize="hasRole('ROLE_ADMIN')" href="/edit">Edit</a>
-                    <a class="edit-btn" sec:authorize="hasRole('ROLE_MAINTAINER')" href="/edit">Edit</a>
+                    <a class="edit-btn" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/edit/{id}(id=${task.id})}">Edit</a>
+                    <a class="edit-btn" sec:authorize="hasRole('ROLE_MAINTAINER')" th:href="@{/edit/{id}(id=${task.id})}">Edit</a>
                 </div>
                 <div class="user-info">
                     <img th:src="@{/attachment/{id}(id=${task.getUser().getAttachment().id})}" alt="User avatar">

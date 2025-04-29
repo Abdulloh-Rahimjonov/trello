@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Task</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            padding: 5px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #photoInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Edit Task</h2>
+
+<form action="/edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    <input type="hidden" name="id" th:value="${task.id}">
+
+    <label>Title:</label>
+    <input type="text" name="title" th:value="${task.title}" required>
+    <br>
+
+    <label>User:</label>
+    <select name="user.id" required>
+        <option th:each="user : ${users}"
+                th:value="${user.id}"
+                th:text="${user.name}"
+                th:selected="${user.id} == ${task.user.id}">
+        </option>
+    </select>
+    <br>
+
+    <label>Current Image (click to change):</label>
+    <br>
+    <img id="imagePreview"
+         th:if="${task.attachment != null}"
+         th:src="@{/attachment/{id}(id=${task.attachment.id})}"
+         alt="Task Image"
+         class="image-preview"
+         onclick="document.getElementById('photoInput').click()">
+
+    <img id="imagePreview"
+         th:unless="${task.attachment != null}"
+         src="https://via.placeholder.com/200?text=No+Image"
+         alt="No Image"
+         class="image-preview"
+         onclick="document.getElementById('photoInput').click()">
+
+    <input type="file" id="photoInput" name="photo" accept="image/*" onchange="previewImage(this)">
+    <br><br>
+
+    <button type="submit">Save</button>
+</form>
+
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                // Update the image preview
+                document.getElementById('imagePreview').src = e.target.result;
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+</body>
+</html>

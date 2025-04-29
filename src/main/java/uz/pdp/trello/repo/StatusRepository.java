@@ -13,4 +13,6 @@ public interface StatusRepository extends JpaRepository<Status, Integer> {
     List<Status> findActiveOrdered();
 
     Optional<Status> findByName(String name);
+
+    Optional<Status> findByPositionNumber(Integer positionNumber);
 }

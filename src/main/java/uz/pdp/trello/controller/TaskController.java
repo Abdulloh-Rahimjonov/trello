@@ -1,9 +1,7 @@
 package uz.pdp.trello.controller;
 
-import jakarta.mail.Multipart;
 import jakarta.servlet.annotation.MultipartConfig;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -44,7 +42,6 @@ public class TaskController {
         List<Task> tasks = taskRepository.findAll();
         List<Status> status = statusRepository.findActiveOrdered();
         User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(user);
         model.addAttribute("tasks", tasks);
         model.addAttribute("statuses", status);
         model.addAttribute("user", user);
