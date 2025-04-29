@@ -86,6 +86,6 @@ public class TaskController {
                 }
             }
         }
-        return "";
+        return "redirect:/task";
     }
 }
