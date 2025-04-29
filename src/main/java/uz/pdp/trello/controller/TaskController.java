@@ -40,6 +40,19 @@ public class TaskController {
         model.addAttribute("statuses", status);
         model.addAttribute("user", user);
 
+        int minPosition = status.stream()
+                .mapToInt(Status::getPositionNumber)
+                .min()
+                .orElse(Integer.MAX_VALUE);
+
+        int maxPosition = status.stream()
+                .mapToInt(Status::getPositionNumber)
+                .max()
+                .orElse(Integer.MIN_VALUE);
+
+        model.addAttribute("minPosition", minPosition);
+        model.addAttribute("maxPosition", maxPosition);
+
         return "taskHomePage";
     }
 }
