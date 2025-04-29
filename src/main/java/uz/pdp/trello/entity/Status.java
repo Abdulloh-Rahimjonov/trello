@@ -20,6 +20,5 @@ public class Status {
     @Column(unique=true)
     private String name;
     private Boolean isActive;
-    @Column(unique = true)
     private Integer positionNumber;
 }
