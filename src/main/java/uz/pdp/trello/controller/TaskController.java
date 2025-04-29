@@ -33,13 +33,13 @@ public class TaskController {
     public String taskHomePage(Model model) {
 
         List<Task> tasks = taskRepository.findAll();
-        List<Status> status = statusRepository.findAll();
+        List<Status> status = statusRepository.findActiveOrdered();
         User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println(user);
         model.addAttribute("tasks", tasks);
-        model.addAttribute("status", status);
+        model.addAttribute("statuses", status);
         model.addAttribute("user", user);
 
-        return "task"; //Iskandar oka siz html yaratib html nomini shu joyga qoshas
+        return "taskHomePage";
     }
 }
