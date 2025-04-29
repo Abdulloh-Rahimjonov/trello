@@ -73,6 +73,7 @@ public class TaskController {
                     }
                 }
             }
+
             else {
                 num = num - 1;
                 List<Status> all = statusRepository.findActiveOrdered();
