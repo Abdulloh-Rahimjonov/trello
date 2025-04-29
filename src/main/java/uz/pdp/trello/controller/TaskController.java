@@ -4,8 +4,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import uz.pdp.trello.entity.Status;
 import uz.pdp.trello.entity.Task;
 import uz.pdp.trello.entity.User;
@@ -14,6 +13,7 @@ import uz.pdp.trello.repo.TaskRepository;
 import uz.pdp.trello.repo.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller()
 @RequestMapping("/task")
@@ -54,5 +54,37 @@ public class TaskController {
         model.addAttribute("maxPosition", maxPosition);
 
         return "taskHomePage";
+    }
+
+    @PostMapping("/move/{id}")
+    public String moveTask(@PathVariable("id") Integer id , @RequestParam Integer min ,@RequestParam Integer max, @RequestParam String yol, Model model) {
+        Optional<Task> byId = taskRepository.findById(id);
+        if (byId.isPresent()) {
+            Task task = byId.get();
+            Integer num = task.getStatus().getPositionNumber();
+            if (yol.equals("right")){
+                num = num + 1;
+                List<Status> all = statusRepository.findActiveOrdered();
+                for (Status status : all) {
+                    if (status.getPositionNumber() >= num){
+                        task.setStatus(status);
+                        taskRepository.save(task);
+                        return "redirect:/task";
+                    }
+                }
+            }
+            else {
+                num = num - 1;
+                List<Status> all = statusRepository.findActiveOrdered();
+                for (Status status : all) {
+                    if (status.getPositionNumber() <= num){
+                        task.setStatus(status);
+                        taskRepository.save(task);
+                        return "redirect:/task";
+                    }
+                }
+            }
+        }
+        return "";
     }
 }

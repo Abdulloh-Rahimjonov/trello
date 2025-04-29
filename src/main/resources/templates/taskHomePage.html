@@ -228,8 +228,20 @@
                 </div>
                 <div class="task-actions">
                     <div class="move-buttons">
-                        <a th:href="@{/task/toLeft/{id}(id=${task.id})}">←</a>
-                        <a th:href="@{/task/toRight/{id}(id=${task.id})}">→</a>
+                        <form th:if="${!status.getPositionNumber().equals(minPosition)}" th:action="@{/task/move/{id}(id=${task.id})}" method="post">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                            <input type="hidden" name="min" th:value="${minPosition}">
+                            <input type="hidden" name="max" th:value="${maxPosition}">
+                            <input type="hidden" name="yol" value="left">
+                            <button>←</button>
+                        </form>
+                        <form th:if="${!status.getPositionNumber().equals(maxPosition)}" th:action="@{/task/move/{id}(id=${task.id})}" method="post">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                            <input type="hidden" name="min" th:value="${minPosition}">
+                            <input type="hidden" name="max" th:value="${maxPosition}">
+                            <input type="hidden" name="yol" value="right">
+                            <button>→</button>
+                        </form>
                     </div>
                     <a class="comments-btn" th:href="@{/task/comments/{id}(id=${task.id})}">Comments</a>
                 </div>
