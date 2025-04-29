@@ -46,51 +46,5 @@ public class VerifiedController {
         return "verified";
     }
 
-    @SneakyThrows
-    @PostMapping("/verified")
-    public String verified(@RequestParam String randomCode,
-                           @ModelAttribute UserDTO userDTO,
-                           @RequestParam String userCode,
-                           Model model) {
-        if (!randomCode.equals(userCode)) {
-            model.addAttribute("userDTO", userDTO);
-            model.addAttribute("randomCode", randomCode);
-            return "redirect:/verifiedPage";
-        }
 
-        if (userDTO.getPassword().equals(userDTO.getPassword2())) {
-            User user = new User();
-            user.setName(userDTO.getName());
-            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            user.setUsername(userDTO.getUsername());
-
-            Role byName = roleRepository.findByRole(Roles.PROGRAMMER.toString());
-            List<Role> roles = new ArrayList<>();
-            roles.add(byName);
-
-            Attachment attachment;
-            if (userDTO.getPhoto() != null && !userDTO.getPhoto().isEmpty()) {
-                // Userdan keldi
-                attachment = new Attachment();
-                attachment.setContent(userDTO.getPhoto().getBytes());
-            } else {
-                attachment = new Attachment();
-                InputStream inputStream = getClass().getResourceAsStream("/static/picture/rasm.jpg");
-                if (inputStream != null) {
-                    attachment.setContent(inputStream.readAllBytes());
-                } else {
-                    throw new RuntimeException("Default picture not found!");
-                }
-            }
-            attachmentRepository.save(attachment);
-            user.setAttachment(attachment);
-
-            user.setRoles(roles);
-
-            userRepository.save(user);
-            return "redirect:/login";
-        }
-
-        return "redirect:/register";
-    }
 }
