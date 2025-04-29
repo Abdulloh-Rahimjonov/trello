@@ -28,7 +28,7 @@ public class SecurityController {
                 })
                 .formLogin(form ->
                         form.loginPage("/login").permitAll()
-                                .defaultSuccessUrl("/market/addOrder", true))
+                                .defaultSuccessUrl("/task", true))
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
