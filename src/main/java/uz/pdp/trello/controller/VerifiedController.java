@@ -39,7 +39,6 @@ public class VerifiedController {
 
     @PostMapping("/verifiedPage")
     public String getVerified(@ModelAttribute UserDTO userDTO, Model model) {
-        System.out.println(userDTO);
         String randomCode = emailService.randomCode();
         emailService.sendEmail(userDTO.getUsername() , randomCode);
         model.addAttribute("randomCode", randomCode);
