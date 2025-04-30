@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Users</title>
+</head>
+<body>
+<h2>User List</h2>
+<table border="1">
+    <tr>
+        <th>ID</th><th>Name</th><th>Username</th><th>Roles</th><th>Actions</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.username}"></td>
+        <td>
+            <span th:each="role : ${user.roles}" th:text="${role.role} + ' '"></span>
+        </td>
+        <td>
+            <form th:action="@{'/admin/delete/' + ${user.id}}" method="post" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+            <a th:href="@{'/admin/change-role/' + ${user.id}}">Change role</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

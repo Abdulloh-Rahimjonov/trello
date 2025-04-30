@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Change Role</title>
+</head>
+<body>
+<h2 th:text="'Change Roles for ' + ${user.name}"></h2>
+
+<form th:action="@{'/admin/change-role/' + ${user.id}}" method="post">
+    <label>Set Single Role:
+        <select name="roleId">
+            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.role}"></option>
+        </select>
+    </label>
+    <button type="submit">Change Role</button>
+</form>
+
+<form th:action="@{'/admin/add-role/' + ${user.id}}" method="post" style="margin-top: 20px;">
+    <label>Add Additional Role:
+        <select name="roleId">
+            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.role}"></option>
+        </select>
+    </label>
+    <button type="submit">Add Role</button>
+</form>
+
+<p><a href="/admin">⬅ Back</a></p>
+</body>
+</html>
