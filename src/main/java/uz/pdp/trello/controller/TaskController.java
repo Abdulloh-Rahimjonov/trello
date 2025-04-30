@@ -110,12 +110,9 @@ public class TaskController {
                           Model model) throws IOException {
 
         Optional<User> user = userRepository.findById(userId);
-        Optional<Status> status = statusRepository.findByName("OPEN");
+        List<Status> activeOrdered = statusRepository.findActiveOrdered();
+        Status first = activeOrdered.getFirst();
 
-        if (user.isEmpty() || status.isEmpty()) {
-            model.addAttribute("error", "User or Status not found");
-            return "taskHomePage";
-        }
 
         Attachment attachment = new Attachment();
         attachment.setContent(photo.getBytes());
@@ -124,7 +121,7 @@ public class TaskController {
 
         Task task = new Task();
         task.setUser(user.get());
-        task.setStatus(status.get());
+        task.setStatus(first);
         task.setTitle(title);
         task.setAttachment(attachment);
 
