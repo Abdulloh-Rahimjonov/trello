@@ -5,8 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.trello.entity.*;
+import uz.pdp.trello.entity.enums.Roles;
 import uz.pdp.trello.repo.*;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,7 +25,11 @@ public class UserCrudController {
 
     @PostMapping("/delete/{id}")
     public String deleteUser(@PathVariable Integer id) {
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        }catch (Exception e) {
+            return "redirect:/admin";
+        }
         return "redirect:/admin";
     }
 
