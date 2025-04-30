@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@MultipartConfig
 @Controller
 @RequiredArgsConstructor
 public class VerifiedController {
@@ -66,10 +65,7 @@ public class VerifiedController {
             roles.add(byName);
 
             Attachment attachment;
-            if (userDTO.getPhoto() != null && !userDTO.getPhoto().isEmpty()) {
-                attachment = new Attachment();
-                attachment.setContent(userDTO.getPhoto().getBytes());
-            } else {
+
                 attachment = new Attachment();
                 InputStream inputStream = getClass().getResourceAsStream("/static/picture/rasm.jpg");
                 if (inputStream != null) {
@@ -79,7 +75,7 @@ public class VerifiedController {
                 } else {
                     throw new RuntimeException("Default picture not found!");
                 }
-            }
+
             attachmentRepository.save(attachment);
             user.setAttachment(attachment);
 

@@ -9,5 +9,4 @@ public class UserDTO {
     private String username;
     private String password;
     private String password2;
-    private MultipartFile photo;
 }
