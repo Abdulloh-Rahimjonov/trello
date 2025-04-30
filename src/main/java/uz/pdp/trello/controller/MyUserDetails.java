@@ -7,7 +7,6 @@ import uz.pdp.trello.entity.User;
 import uz.pdp.trello.repo.UserRepository;
 
 import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class MyUserDetails implements UserDetailsService {
@@ -16,7 +15,8 @@ public class MyUserDetails implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> byEmail = userRepository.findByUsername(username);
-        return byEmail.orElse(null);
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 }
+
