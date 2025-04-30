@@ -1,28 +1,206 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>All Users</title>
+    <title>User Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --danger: #f72585;
+            --success: #4cc9f0;
+            --text: #2b2d42;
+            --light: #f8f9fa;
+            --border: #e0e0e0;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #f5f7fa;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+
+        .back-btn {
+            padding: 0.6rem 1.2rem;
+            background-color: #6c757d;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .user-table thead th {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-weight: 500;
+            position: sticky;
+            top: 0;
+        }
+
+        .user-table tbody td {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .user-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .user-table tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.03);
+        }
+
+        .role-tag {
+            display: inline-block;
+            padding: 0.35rem 0.8rem;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #e5177e;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a56d4;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .user-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.6rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-<h2>User List</h2>
-<table border="1">
+<div class="header-container">
+    <h2>User Management</h2>
+    <a href="/tasks" class="back-btn">Back to Tasks</a>
+</div>
+
+<table class="user-table">
+    <thead>
     <tr>
-        <th>ID</th><th>Name</th><th>Username</th><th>Roles</th><th>Actions</th>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Roles</th>
+        <th>Actions</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="user : ${users}">
-        <td th:text="${user.id}"></td>
         <td th:text="${user.name}"></td>
         <td th:text="${user.username}"></td>
         <td>
-            <span th:each="role : ${user.roles}" th:text="${role.role} + ' '"></span>
+            <span th:each="role : ${user.roles}" class="role-tag" th:text="${role.role}"></span>
         </td>
         <td>
-            <form th:action="@{'/admin/delete/' + ${user.id}}" method="post" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
-            <a th:href="@{'/admin/change-role/' + ${user.id}}">Change role</a>
+            <div class="action-buttons">
+                <form th:action="@{'/admin/delete/' + ${user.id}}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                <a class="btn btn-primary" th:href="@{'/admin/change-role/' + ${user.id}}">Edit Roles</a>
+            </div>
         </td>
     </tr>
+    </tbody>
 </table>
 </body>
 </html>
