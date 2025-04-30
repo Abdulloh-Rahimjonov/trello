@@ -1,10 +1,7 @@
 package uz.pdp.trello.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -17,13 +14,18 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @ManyToOne
     private Status status;
+
     @ManyToOne
     private Attachment attachment;
+
     @ManyToOne
     private User user;
+
     private String title;
-    @OneToMany
-    List<Comment> comments;
+
+    @OneToMany()
+    private List<Comment> comments;
 }

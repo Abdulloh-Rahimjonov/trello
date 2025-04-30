@@ -37,6 +37,7 @@ public class VerifiedController {
     public String getVerified(@ModelAttribute UserDTO userDTO, Model model) {
         String randomCode = emailService.randomCode();
         emailService.sendEmail(userDTO.getUsername() , randomCode);
+        System.out.print(randomCode);
         model.addAttribute("randomCode", randomCode);
         model.addAttribute("userDTO", userDTO);
         return "verified";

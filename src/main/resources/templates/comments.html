@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Comments</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <!-- Task info -->
+    <div class="card mb-4">
+        <img th:src="@{/attachment/{id}(id=${task.attachment.id})}" alt="Attachment image" class="card-img-top" style="max-height: 300px; object-fit: contain;">
+        <div class="card-body">
+            <h2 class="card-title text-primary" th:text="${task.getTitle()}"></h2>
+        </div>
+    </div>
+
+    <!-- Back link -->
+    <div class="mb-3">
+        <a href="/task" class="btn btn-secondary">&larr; Back to Tasks</a>
+    </div>
+
+    <!-- Comments table -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">Comments</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead class="table-light">
+                <tr>
+                    <th>User</th>
+                    <th>Comment</th>
+                    <th>Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="comment : ${task.comments}">
+                    <td th:text="${comment.user.name}"></td>
+                    <td th:text="${comment.text}"></td>
+                    <td th:text="${#temporals.format(comment.createdAt, 'MM-dd HH:mm')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Comment Form -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Add a Comment</h5>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/comments/add/{taskId}(taskId = ${task.id})}" method="post">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                <div class="mb-3">
+                    <input type="text" name="text" required placeholder="Write your comment..." class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Comment</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
