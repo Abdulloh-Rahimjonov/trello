@@ -23,7 +23,6 @@ public class SecurityController {
                                     "/verified",
                                     "/verifiedPage"
                             ).permitAll()
-//                            .requestMatchers("", "", "").hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .formLogin(form ->

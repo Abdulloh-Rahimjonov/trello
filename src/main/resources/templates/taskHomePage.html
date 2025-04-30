@@ -67,19 +67,17 @@
             transform: translateY(-2px);
         }
 
-        /* Status Columns */
         .status-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            display: flex;
+            flex-direction: row;
             gap: 20px;
             margin-top: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
         }
-
         .status-column {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            box-shadow: var(--box-shadow);
+            min-width: 300px;
+            flex-shrink: 0;
         }
 
         .status-column h3 {
@@ -187,15 +185,18 @@
             color: white;
         }
 
-        /* Responsive adjustments */
         @media (max-width: 768px) {
             div[sec\:authorize="isAuthenticated()"] {
                 flex-direction: column;
                 gap: 10px;
             }
-
             .status-container {
-                grid-template-columns: 1fr;
+                display: flex;
+                flex-direction: row;
+                gap: 20px;
+                margin-top: 20px;
+                overflow-x: auto;
+                padding-bottom: 10px;
             }
         }
     </style>
@@ -205,7 +206,10 @@
 
     <a sec:authorize="hasRole('ROLE_ADMIN')" href="/admin">User CRUD</a>
 
-    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" href="/addStatus">Add Status</a>
+    <form sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" action="/status/addStatusPage">
+        <input type="hidden" name="maxPosition" th:value="${maxPosition}">
+        <button>Add Status</button>
+    </form>
     <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" href="/manageOrders">Manage Orders</a>
 
     <form sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" action="/task/addTaskPage" method="get">
