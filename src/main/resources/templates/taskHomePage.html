@@ -209,7 +209,6 @@
     <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" href="/manageOrders">Manage Orders</a>
 
     <form sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" action="/task/addTaskPage" method="get">
-        <input type="hidden" name="userId" th:value="${user.id}">
         <button type="submit">Add Task</button>
     </form>
 

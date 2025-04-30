@@ -51,7 +51,7 @@ public class EditTaskController {
         existingTask.setTitle(task.getTitle());
         existingTask.setUser(task.getUser());
 
-        // Agar yangi rasm yuborilgan bo‘lsa, uni saqlaymiz
+
         if (!file.isEmpty()) {
             try {
                 Attachment attachment = new Attachment();

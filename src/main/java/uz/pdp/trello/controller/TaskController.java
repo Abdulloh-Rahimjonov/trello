@@ -83,8 +83,9 @@ public class TaskController {
             else {
                 num = num - 1;
                 List<Status> all = statusRepository.findActiveOrdered();
-                for (Status status : all) {
-                    if (status.getPositionNumber() <= num){
+                for (int i = all.size() - 1; i >= 0; i--) {
+                    Status status = all.get(i);
+                    if (status.getPositionNumber() <= num) {
                         task.setStatus(status);
                         taskRepository.save(task);
                         return "redirect:/task";
@@ -96,8 +97,9 @@ public class TaskController {
     }
 
     @GetMapping("/addTaskPage")
-    public String addTaskPage(Model model , @RequestParam Integer userId) {
-        model.addAttribute("userId", userId);
+    public String addTaskPage(Model model) {
+        List<User> users = userRepository.findAll();
+        model.addAttribute("users" , users);
         return "taskAddPage";
     }
     @Transactional

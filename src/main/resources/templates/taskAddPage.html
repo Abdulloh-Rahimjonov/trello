@@ -12,7 +12,6 @@
 
     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
-    <input type="hidden" name="userId" th:value="${userId}">
     <!-- Title -->
     <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -23,6 +22,17 @@
     <div class="mb-3">
         <label for="photo" class="form-label">Photo (Attachment)</label>
         <input type="file" id="photo" name="photo">
+    </div>
+
+    <div class="mb-3">
+        <label for="userId" class="form-label">Select User</label>
+        <select class="form-select" id="userId" name="userId" required>
+            <option value="">-- Select User --</option>
+            <option th:each="user : ${users}"
+                    th:value="${user.id}"
+                    th:text="${user.name}">
+            </option>
+        </select>
     </div>
 
     <!-- Submit -->
