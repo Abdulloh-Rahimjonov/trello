@@ -210,7 +210,7 @@
         <input type="hidden" name="maxPosition" th:value="${maxPosition}">
         <button>Add Status</button>
     </form>
-    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" href="/manageOrders">Manage Orders</a>
+    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" href="status/manageOrders">Manage Orders</a>
 
     <form sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" action="/task/addTaskPage" method="get">
         <button type="submit">Add Task</button>

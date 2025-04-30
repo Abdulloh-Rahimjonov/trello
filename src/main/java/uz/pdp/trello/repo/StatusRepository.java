@@ -12,7 +12,7 @@ public interface StatusRepository extends JpaRepository<Status, Integer> {
     @Query("SELECT s FROM Status s WHERE s.isActive = true ORDER BY s.positionNumber")
     List<Status> findActiveOrdered();
 
-    Optional<Status> findByName(String name);
+    @Query("SELECT s FROM Status s ORDER BY s.positionNumber")
+    List<Status> findOrderByPositionNumber();
 
-    Optional<Status> findByPositionNumber(Integer positionNumber);
 }
