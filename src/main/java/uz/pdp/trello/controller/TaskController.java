@@ -96,38 +96,6 @@ public class TaskController {
         return "redirect:/task";
     }
 
-    @GetMapping("/addTaskPage")
-    public String addTaskPage(Model model) {
-        List<User> users = userRepository.findAll();
-        model.addAttribute("users" , users);
-        return "taskAddPage";
-    }
-    @Transactional
-    @PostMapping("/addTask")
-    public String addTask(@RequestParam Integer userId,
-                          @RequestParam String title,
-                          @RequestParam MultipartFile photo,
-                          Model model) throws IOException {
 
-        Optional<User> user = userRepository.findById(userId);
-        List<Status> activeOrdered = statusRepository.findActiveOrdered();
-        Status first = activeOrdered.getFirst();
-
-
-        Attachment attachment = new Attachment();
-        attachment.setContent(photo.getBytes());
-        attachment.setFile_type(".jpg");
-        attachmentRepository.save(attachment);
-
-        Task task = new Task();
-        task.setUser(user.get());
-        task.setStatus(first);
-        task.setTitle(title);
-        task.setAttachment(attachment);
-
-        taskRepository.save(task);
-
-        return "redirect:/task";
-    }
 
 }
