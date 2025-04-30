@@ -205,23 +205,31 @@
 <div sec:authorize="isAuthenticated()">
 
     <a sec:authorize="hasRole('ROLE_ADMIN')" href="/admin">User CRUD</a>
-    <a sec:authorize="hasRole('ROLE_ADMIN')" href="/addStatus">Add Status</a>
-    <a sec:authorize="hasRole('ROLE_ADMIN')" href="/manageOrders">Manage Orders</a>
 
-    <a sec:authorize="hasRole('ROLE_MAINTAINER')" href="/addStatus">Add Status</a>
-    <a sec:authorize="hasRole('ROLE_MAINTAINER')" href="/manageOrders">Manage Orders</a>
+    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" href="/addStatus">Add Status</a>
+    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" href="/manageOrders">Manage Orders</a>
 
-    <form sec:authorize="hasRole('ROLE_MAINTAINER')" action="/task/addTaskPage" method="get">
-        <input type="hidden" name="userId" th:value="${user.id}">
-        <button type="submit">Add Task</button>
-    </form>
-
-    <form sec:authorize="hasRole('ROLE_ADMIN')" action="/task/addTaskPage" method="get">
+    <form sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" action="/task/addTaskPage" method="get">
         <input type="hidden" name="userId" th:value="${user.id}">
         <button type="submit">Add Task</button>
     </form>
 
 </div>
+
+<div sec:authorize="isAuthenticated()">
+    <div class="user-info">
+        <img th:src="@{/attachment/{id}(id=${user.attachment.id})}" alt="User avatar">
+        <div>
+            <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${user.username}"></span></p>
+            <p><strong>Roles:</strong>
+                <span th:each="role : ${user.roles}" th:text="${role.role} + ' '"></span>
+            </p>
+        </div>
+    </div>
+</div>
+
+
 
 
 <div class="status-container">
