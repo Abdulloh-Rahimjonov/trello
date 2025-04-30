@@ -51,7 +51,6 @@ public class EditTaskController {
         existingTask.setTitle(task.getTitle());
         existingTask.setUser(task.getUser());
 
-
         if (!file.isEmpty()) {
             try {
                 Attachment attachment = new Attachment();
