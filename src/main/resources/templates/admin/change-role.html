@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Change Role</title>
+    <meta charset="UTF-8">
+    <script>
+        function validateForm() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const submitBtn = document.getElementById('submitBtn');
+
+            let isChecked = false;
+            checkboxes.forEach(cb => {
+                if (cb.checked) isChecked = true;
+            });
+
+            submitBtn.disabled = !isChecked;
+        }
+
+        window.onload = validateForm;
+    </script>
+</head>
+<body>
+<h2 th:text="'Change Roles for ' + ${user.name}"></h2>
+
+<form th:action="@{'/admin/change-role/' + ${user.id}}" method="post" oninput="validateForm()">
+    <div th:each="role : ${roles}">
+        <label>
+            <input type="checkbox"
+                   name="roleId"
+                   th:value="${role.id}"
+                   th:checked="${user.roles.contains(role)}">
+            <span th:text="${role.role}">Role Name</span>
+        </label>
+        <br/>
+    </div>
+
+    <br>
+    <button type="submit" id="submitBtn">Submit</button>
+</form>
+
+<p><a href="/admin">⬅️ Back</a></p>
+</body>
+</html>
