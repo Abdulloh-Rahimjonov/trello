@@ -51,7 +51,7 @@ public class CommentController {
         Comment comment = new Comment();
         comment.setCreatedAt(LocalDateTime.now());
         comment.setText(text);
-        comment.setUser(user);
+        comment.setUserName(user.getName());
 
         commentRepository.save(comment);
         task.getComments().add(comment);

@@ -32,7 +32,7 @@ public class StatusController {
     public String addStatus(@RequestParam Integer maxPosition, @RequestParam String name, Model model) {
         Status status = new Status();
         status.setName(name);
-        status.setPositionNumber(maxPosition + 1);
+        status.setPositionNumber(statusRepository.findAll().size()+1);
         status.setIsActive(true);
         statusRepository.save(status);
         return "redirect:/task";

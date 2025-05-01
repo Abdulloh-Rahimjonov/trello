@@ -44,7 +44,6 @@
             color: var(--secondary-color);
         }
 
-        /* Navigation */
         div[sec\:authorize="isAuthenticated()"] {
             display: flex;
             gap: 15px;
@@ -87,7 +86,6 @@
             border-bottom: 2px solid var(--accent-color);
         }
 
-        /* Task Cards */
         .task-card {
             background-color: var(--light-color);
             border-radius: var(--border-radius);
@@ -136,7 +134,6 @@
             justify-content: space-between;
             margin-top: 15px;
         }
-
 
         .task-actions a {
             padding: 6px 12px;
@@ -203,7 +200,6 @@
 </head>
 <body>
 <div sec:authorize="isAuthenticated()">
-
     <a sec:authorize="hasRole('ROLE_ADMIN')" href="/admin">User CRUD</a>
 
     <form sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" action="/status/addStatusPage">
@@ -215,7 +211,6 @@
     <form sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" action="/task/addTaskPage" method="get">
         <button type="submit">Add Task</button>
     </form>
-
 </div>
 
 <div sec:authorize="isAuthenticated()">
@@ -228,35 +223,40 @@
     </div>
 </div>
 
-
-
 <div class="status-container">
     <div class="status-column" th:each="status :${statuses}">
         <h3 th:text="${status.name}"></h3>
         <div th:if="${task.status == status}" th:each="task : ${tasks}">
             <div class="task-card">
-                <h4 th:text="${task.getTitle()}"></h4>
-                <img th:if="${task.attachment != null}" th:src="@{/attachment/{id}(id=${task.attachment.id})}"
-                     alt="Task image">
+                <h4 th:text="${task.title}"></h4>
+
+                <!-- Taskga biriktirilgan attachment bo‘lsa rasm chiqadi -->
+                <img th:if="${task.attachment != null}" th:src="@{/attachment/{id}(id=${task.attachment.id})}" alt="Task image">
+
                 <div sec:authorize="isAuthenticated()">
                     <a class="edit-btn"
                        sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MAINTAINER')"
                        th:href="@{/edit/{id}(id=${task.id})}">Edit</a>
                 </div>
-                <div class="user-info">
-                    <img th:src="@{/attachment/{id}(id=${task.getUser().getAttachment().id})}" alt="User avatar">
-                    <h4 th:text="${task.getUser().name}"></h4>
+
+                <!-- Taskga user biriktirilgan bo‘lsa, user info chiqadi -->
+                <div class="user-info" th:if="${task.user != null}">
+                    <img th:if="${task.user.attachment != null}"
+                         th:src="@{/attachment/{id}(id=${task.user.attachment.id})}"
+                         alt="User avatar">
+                    <h4 th:text="${task.user.name}"></h4>
                 </div>
+
                 <div class="task-actions">
                     <div class="move-buttons">
-                        <form th:if="${!status.getPositionNumber().equals(minPosition)}" th:action="@{/task/move/{id}(id=${task.id})}" method="post">
+                        <form th:if="${!status.positionNumber.equals(minPosition)}" th:action="@{/task/move/{id}(id=${task.id})}" method="post">
                             <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                             <input type="hidden" name="min" th:value="${minPosition}">
                             <input type="hidden" name="max" th:value="${maxPosition}">
                             <input type="hidden" name="yol" value="left">
                             <button>←</button>
                         </form>
-                        <form th:if="${!status.getPositionNumber().equals(maxPosition)}" th:action="@{/task/move/{id}(id=${task.id})}" method="post">
+                        <form th:if="${!status.positionNumber.equals(maxPosition)}" th:action="@{/task/move/{id}(id=${task.id})}" method="post">
                             <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                             <input type="hidden" name="min" th:value="${minPosition}">
                             <input type="hidden" name="max" th:value="${maxPosition}">

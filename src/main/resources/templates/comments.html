@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="comment : ${task.comments}">
-                    <td th:text="${comment.user.name}"></td>
+                    <td th:text="${comment.userName}"></td>
                     <td th:text="${comment.text}"></td>
                     <td th:text="${#temporals.format(comment.createdAt, 'MM-dd HH:mm')}"></td>
                 </tr>

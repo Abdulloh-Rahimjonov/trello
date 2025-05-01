@@ -16,6 +16,8 @@ public class UserCrudController {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final TaskRepository taskRepository;
+    private final AttachmentRepository attachmentRepository;
 
     @GetMapping
     public String listUsers(Model model) {
@@ -26,7 +28,21 @@ public class UserCrudController {
     @PostMapping("/delete/{id}")
     public String deleteUser(@PathVariable Integer id) {
         try {
-            userRepository.deleteById(id);
+
+            Optional<User> byId = userRepository.findById(id);
+            if (byId.isPresent()) {
+                User user = byId.get();
+                List<Task> tasks = taskRepository.findAll();
+                for (Task task : tasks) {
+                    if (task.getUser().equals(user)) {
+                        task.setUser(null);
+                    }
+                }
+                Attachment attachment = user.getAttachment();
+                attachmentRepository.deleteById(attachment.getId());
+                taskRepository.saveAll(tasks);
+                userRepository.deleteById(id);
+            }
         }catch (Exception e) {
             return "redirect:/admin";
         }
