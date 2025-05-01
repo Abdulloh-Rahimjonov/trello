@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .profile-container {
+            max-width: 500px;
+            margin: auto;
+            margin-top: 80px;
+            animation: fadeIn 0.8s ease-out;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #0d6efd;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 8px 16px rgba(13, 110, 253, 0.2);
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 12px 24px rgba(13, 110, 253, 0.3);
+        }
+
+        .home-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 30px;
+        }
+
+        .home-btn:hover {
+            transform: translateX(10px);
+            background: #0d6efd !important;
+            color: white !important;
+        }
+
+        .upload-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+        }
+
+        .wave {
+            animation: wave 2s infinite;
+            display: inline-block;
+        }
+
+        @keyframes wave {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(-10deg); }
+            20% { transform: rotate(12deg); }
+            30% { transform: rotate(-10deg); }
+            40% { transform: rotate(9deg); }
+            50% { transform: rotate(0deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #0d6efd;
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 576px) {
+            .home-btn {
+                position: relative;
+                left: 0;
+                top: 0;
+                margin-bottom: 20px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .profile-container {
+                margin-top: 30px;
+                padding: 1.5rem;
+            }
+        }
+
+        .skeleton {
+            animation: skeleton-loading 1.5s infinite linear;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="/" class="btn btn-secondary home-btn">
+    <i class="fas fa-home me-1"></i>Home <i class="fas fa-arrow-right ms-2" style="opacity: 0; transition: opacity 0.3s;"></i>
+</a>
+
+<div class="container profile-container text-center">
+    <h2 class="mb-4 animate__animated animate__fadeInDown">Profile <span class="wave">👋</span></h2>
+
+    <div class="skeleton" style="width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px; display: none;"></div>
+
+    <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${user.username}"></span></p>
+    <p><strong>Roles:</strong>
+        <span th:each="role : ${user.roles}" th:text="${role.role} + ' '"></span>
+    </p>
+
+    <div class="profile-image-container">
+        <img th:src="@{/attachment/{id}(id=${user.attachment.id})}" alt="User avatar">
+    </div>
+
+    <form sec:authorize="hasAnyRole('ROLE_ADMIN' , 'ROLE_PROGRAMMER' , 'ROLE_MAINTAINER')" action="/profile/updatePage" method="post" enctype="multipart/form-data" class="mb-4">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+        <input type="hidden" name="userId" th:value="${user.id}">
+        <button type="submit" class="btn btn-primary upload-btn">
+            <span class="upload-text">Update</span>
+            <i class="fas fa-cloud-upload-alt ms-2"></i>
+        </button>
+    </form>
+
+    <form th:action="@{/logout}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
+<script src="https://kit.fontawesome.com/your-kit-id.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        const progressBar = document.querySelector('.progress-bar');
+        let width = 0;
+        const interval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(interval);
+            } else {
+                width += 10;
+                progressBar.style.width = width + '%';
+            }
+        }, 200);
+    });
+
+    // Home button hover effect
+    document.querySelector('.home-btn').addEventListener('mouseenter', function() {
+        this.querySelector('.fa-arrow-right').style.opacity = '1';
+    });
+
+    document.querySelector('.home-btn').addEventListener('mouseleave', function() {
+        this.querySelector('.fa-arrow-right').style.opacity = '0';
+    });
+
+    window.addEventListener('load', function() {
+        const images = document.querySelectorAll('img.profile-pic');
+        const skeleton = document.querySelector('.skeleton');
+
+        images.forEach(img => {
+            if (!img.complete) {
+                skeleton.style.display = 'block';
+                img.style.display = 'none';
+
+                img.addEventListener('load', () => {
+                    skeleton.style.display = 'none';
+                    img.style.display = 'block';
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -220,20 +220,12 @@
 
 <div sec:authorize="isAuthenticated()">
     <div class="user-info">
-        <img th:src="@{/attachment/{id}(id=${user.attachment.id})}" alt="User avatar">
-        <div>
-            <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
-            <p><strong>Email:</strong> <span th:text="${user.username}"></span></p>
-            <p><strong>Roles:</strong>
-                <span th:each="role : ${user.roles}" th:text="${role.role} + ' '"></span>
-            </p>
-        </div>
+        <a href="/profile" sec:authorize="isAuthenticated()" class="d-flex align-items-center text-decoration-none text-dark">
+            <img th:src="@{/attachment/{id}(id=${user.attachment.id})}" alt="User avatar">
+            <span class="ms-2 fw-semibold" th:text="${user.name}"></span>
+            <input type="hidden" name="user" th:value="${user}">
+        </a>
     </div>
-    <form th:action="@{/logout}" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <button type="submit">Logout</button>
-    </form>
-
 </div>
 
 
