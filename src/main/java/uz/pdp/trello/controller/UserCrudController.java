@@ -41,4 +41,21 @@ public class UserCrudController {
         model.addAttribute("roles", roles);
         return "admin/change-role";
     }
+
+
+    @PostMapping("/change-role/{id}")
+    public String changeUserRoles(@PathVariable Integer id, @RequestParam List<Integer> roleId) {
+        User user = userRepository.findById(id).orElseThrow();
+        List<Role> roles = roleRepository.findAllById(roleId);
+
+        user.setRoles(roles);
+        userRepository.save(user);
+
+        if (roles.size() == 1 && roles.get(0).getRole().equals(Roles.PROGRAMMER.name())) {
+            return "redirect:/logout";
+        }
+
+        return "redirect:/admin";
+    }
+
 }
