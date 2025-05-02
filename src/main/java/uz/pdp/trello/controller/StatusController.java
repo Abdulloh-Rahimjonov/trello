@@ -32,11 +32,19 @@ public class StatusController {
     public String addStatus(@RequestParam Integer maxPosition, @RequestParam String name, Model model) {
         Status status = new Status();
         status.setName(name);
-        status.setPositionNumber(maxPosition + 1);
+        int newPositionNumber = maxPosition + 1;
+
+        while (statusRepository.existsByPositionNumber(newPositionNumber)) {
+            newPositionNumber++;
+        }
+
+        status.setPositionNumber(newPositionNumber);
         status.setIsActive(true);
         statusRepository.save(status);
+
         return "redirect:/task";
     }
+
 
     @GetMapping("/manageOrders")
     public String manageOrders(Model model) {

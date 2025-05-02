@@ -2,59 +2,166 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Verification</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification | Task Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
         body {
-            background-color: #f5f8fa;
+            background-color: #f5f7fa;
             font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
+            padding: 20px;
         }
+
         .verify-container {
             background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
             text-align: center;
-            width: 300px;
+            transition: transform 0.3s ease;
         }
-        input[type="text"], input[type="password"] {
+
+        .verify-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .verify-header {
+            margin-bottom: 30px;
+        }
+
+        .verify-header h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .verify-header p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+
+        .verify-icon {
+            font-size: 64px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .code-input {
             font-size: 24px;
             letter-spacing: 12px;
-            padding: 10px;
+            padding: 12px;
             width: 100%;
             text-align: center;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 2px solid #dee2e6;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .code-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
             outline: none;
         }
-        button {
-            background-color: #0088cc;
+
+        .code-input::placeholder {
+            letter-spacing: 6px;
+            color: #ced4da;
+        }
+
+        .btn-verify {
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 30px;
             font-size: 18px;
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
-        button:hover {
-            background-color: #007ab8;
+
+        .btn-verify:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
         }
-        .message {
+
+        .resend-link {
+            display: block;
             margin-top: 20px;
-            color: green;
-            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .resend-link:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .timer {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 15px;
+        }
+
+        .code-info {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #e9f5ff;
+            border-radius: var(--border-radius);
+            color: #0c63e4;
+            font-size: 14px;
+        }
+
+        @media (max-width: 576px) {
+            .verify-container {
+                padding: 30px 20px;
+            }
+
+            .code-input {
+                font-size: 20px;
+                letter-spacing: 8px;
+            }
         }
     </style>
 </head>
 <body>
 <div class="verify-container">
-    <h2>Verification</h2>
+    <div class="verify-icon">
+        <i class="fas fa-shield-alt"></i>
+    </div>
+
+    <div class="verify-header">
+        <h2>Verification</h2>
+        <p>Enter the 6-digit code sent to your email</p>
+    </div>
+
     <form action="/verified" method="post" enctype="multipart/form-data">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
         <input type="hidden" name="randomCode" th:value="${randomCode}">
@@ -62,9 +169,55 @@
         <input type="hidden" name="name" th:value="${userDTO.name}">
         <input type="hidden" name="password" th:value="${userDTO.password}">
         <input type="hidden" name="password2" th:value="${userDTO.password2}">
-        <input type="text" name="userCode" maxlength="6" required placeholder="______">
-        <button type="submit">Tasdiqlash</button>
+
+        <input type="text" name="userCode" class="code-input" maxlength="6" required placeholder="______" autocomplete="off">
+
+        <button type="submit" class="btn-verify">
+            <i class="fas fa-check-circle"></i> Verify
+        </button>
     </form>
+
+    <a href="#" class="resend-link" id="resendLink" onclick="startTimer(); return false;">
+        Didn't receive a code? Resend
+    </a>
+
+    <div class="timer" id="timer" style="display: none;">
+        Resend available in <span id="countdown">60</span> seconds
+    </div>
+
+    <div class="code-info">
+        <i class="fas fa-info-circle me-2"></i>
+        Check your inbox and spam folder if you don't see the verification code
+    </div>
 </div>
+
+<script>
+    function startTimer() {
+        document.getElementById('resendLink').style.display = 'none';
+        document.getElementById('timer').style.display = 'block';
+
+        let seconds = 60;
+        const countdownEl = document.getElementById('countdown');
+
+        const interval = setInterval(function() {
+            seconds--;
+            countdownEl.textContent = seconds;
+
+            if (seconds <= 0) {
+                clearInterval(interval);
+                document.getElementById('timer').style.display = 'none';
+                document.getElementById('resendLink').style.display = 'block';
+            }
+        }, 1000);
+
+        // Here you would also make an AJAX call to resend the code
+        // This is just UI demonstration
+    }
+
+    // Auto-focus the input field when the page loads
+    window.onload = function() {
+        document.querySelector('.code-input').focus();
+    };
+</script>
 </body>
 </html>

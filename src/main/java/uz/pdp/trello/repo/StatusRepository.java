@@ -15,4 +15,6 @@ public interface StatusRepository extends JpaRepository<Status, Integer> {
     @Query("SELECT s FROM Status s ORDER BY s.positionNumber")
     List<Status> findOrderByPositionNumber();
 
+    boolean existsByPositionNumber(int positionNumber);
+
 }

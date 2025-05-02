@@ -1,82 +1,103 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>User Management</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | Task Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4361ee;
-            --danger: #f72585;
-            --success: #4cc9f0;
-            --text: #2b2d42;
-            --light: #f8f9fa;
-            --border: #e0e0e0;
-            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --danger-color: #e63946;
+            --success-color: #2ecc71;
+            --warning-color: #f9c74f;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: var(--text);
             background-color: #f5f7fa;
-            padding: 2rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .admin-container {
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .header-container {
+        .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-color);
         }
 
-        h2 {
-            color: var(--primary);
-            margin: 0;
+        .admin-header h2 {
+            color: var(--primary-color);
             font-weight: 600;
-            font-size: 1.8rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .back-btn {
-            padding: 0.6rem 1.2rem;
-            background-color: #6c757d;
-            color: white;
-            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.2s ease;
+            transition: var(--transition);
         }
 
         .back-btn:hover {
-            background-color: #5a6268;
-            transform: translateY(-1px);
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .user-table-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
         }
 
         .user-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
         }
 
         .user-table thead th {
-            background-color: var(--primary);
+            background-color: var(--primary-color);
             color: white;
-            padding: 1rem 1.5rem;
-            text-align: left;
+            padding: 15px 20px;
             font-weight: 500;
+            text-align: left;
             position: sticky;
             top: 0;
         }
 
         .user-table tbody td {
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid var(--border);
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
             vertical-align: middle;
         }
 
@@ -85,81 +106,98 @@
         }
 
         .user-table tbody tr:hover {
-            background-color: rgba(67, 97, 238, 0.03);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .user-name-cell {
+            display: flex;
+            align-items: center;
         }
 
         .role-tag {
             display: inline-block;
-            padding: 0.35rem 0.8rem;
+            padding: 5px 12px;
             background-color: rgba(67, 97, 238, 0.1);
-            color: var(--primary);
+            color: var(--primary-color);
             border-radius: 50px;
             font-size: 0.85rem;
             font-weight: 500;
-            margin-right: 0.5rem;
-            margin-bottom: 0.3rem;
+            margin-right: 6px;
+            margin-bottom: 5px;
         }
 
         .action-buttons {
             display: flex;
-            gap: 0.8rem;
-            align-items: center;
+            gap: 10px;
         }
 
         .btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
             cursor: pointer;
             border: none;
         }
 
         .btn-danger {
-            background-color: var(--danger);
+            background-color: var(--danger-color);
             color: white;
         }
 
         .btn-danger:hover {
-            background-color: #e5177e;
-            transform: translateY(-1px);
+            background-color: #d32f2f;
+            transform: translateY(-2px);
         }
 
         .btn-primary {
-            background-color: var(--primary);
+            background-color: var(--primary-color);
             color: white;
         }
 
         .btn-primary:hover {
-            background-color: #3a56d4;
-            transform: translateY(-1px);
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #adb5bd;
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-
-            .header-container {
+            .admin-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 1rem;
+                gap: 15px;
             }
 
-            .user-table {
-                display: block;
+            .user-table-container {
                 overflow-x: auto;
             }
 
             .action-buttons {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 0.6rem;
+                gap: 8px;
             }
 
             .btn {
@@ -170,37 +208,95 @@
     </style>
 </head>
 <body>
-<div class="header-container">
-    <h2>User Management</h2>
-    <a href="/task" class="back-btn">Back to Tasks</a>
+<div class="admin-container">
+    <div class="admin-header">
+        <h2><i class="fas fa-users-cog"></i> User Management</h2>
+        <a href="/task" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Tasks
+        </a>
+    </div>
+
+    <div class="user-table-container">
+        <table class="user-table">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${users.isEmpty()}">
+                <td colspan="4">
+                    <div class="empty-state">
+                        <i class="fas fa-users-slash"></i>
+                        <p>No users found</p>
+                    </div>
+                </td>
+            </tr>
+            <tr th:each="user : ${users}">
+                <td class="user-name-cell">
+                    <img th:if="${user.attachment != null}" th:src="@{/attachment/{id}(id=${user.attachment.id})}" alt="User avatar" class="user-avatar">
+                    <span th:text="${user.name}"></span>
+                </td>
+                <td th:text="${user.username}"></td>
+                <td>
+                            <span th:each="role : ${user.roles}" class="role-tag">
+                                <i class="fas fa-user-tag me-1"></i>
+                                <span th:text="${role.role}"></span>
+                            </span>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <a class="btn btn-primary" th:href="@{'/admin/change-role/' + ${user.id}}">
+                            <i class="fas fa-user-edit"></i> Edit Roles
+                        </a>
+                        <button type="button"
+                                class="btn btn-danger"
+                                th:attr="data-user-id=${user.id}, data-user-name=${user.name}"
+                                onclick="confirmDelete(this)">
+                            <i class="fas fa-user-minus"></i> Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<table class="user-table">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Username</th>
-        <th>Roles</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="user : ${users}">
-        <td th:text="${user.name}"></td>
-        <td th:text="${user.username}"></td>
-        <td>
-            <span th:each="role : ${user.roles}" class="role-tag" th:text="${role.role}"></span>
-        </td>
-        <td>
-            <div class="action-buttons">
-                <form th:action="@{'/admin/delete/' + ${user.id}}" method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-                <a class="btn btn-primary" th:href="@{'/admin/change-role/' + ${user.id}}">Edit Roles</a>
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </td>
-    </tr>
-    </tbody>
-</table>
+            <div class="modal-body">
+                <p>Are you sure you want to delete user <strong id="userName"></strong>?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post">
+                    <button type="submit" class="btn btn-danger">Delete User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function confirmDelete(userId, userName) {
+        document.getElementById('userName').textContent = userName;
+        document.getElementById('deleteForm').action = '/admin/delete/' + userId;
+
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }
+</script>
 </body>
 </html>

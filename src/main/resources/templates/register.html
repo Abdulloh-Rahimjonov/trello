@@ -2,163 +2,160 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Task Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #4a6bff;
-            --secondary-color: #1e1e2f;
-            --text-color: #f0f0f0;
-            --border-color: #444;
-            --error-color: #ff6b6b;
-            --success-color: #2ed573;
-            --background-color: #12121c;
-            --card-background: #1a1a2e;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
         }
 
         body {
-            background-color: var(--background-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
-            color: var(--text-color);
         }
 
-        form {
-            background: var(--card-background);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.6);
+        .register-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 40px;
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
             transition: transform 0.3s ease;
         }
 
-        form:hover {
+        .register-container:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
 
-        h1 {
+        .register-header {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+        }
+
+        .register-header h1 {
             color: var(--primary-color);
             font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 10px;
         }
 
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px 15px;
+        .register-header .logo-icon {
+            font-size: 48px;
+            color: var(--primary-color);
             margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-size: 16px;
-            background-color: #2a2a3d;
-            color: var(--text-color);
         }
 
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            outline: none;
+        .form-floating {
+            margin-bottom: 20px;
+        }
+
+        .form-floating input:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.3);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
         }
 
-        .image-upload {
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        #photoPreview {
-            cursor: pointer;
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-            border: 2px dashed var(--border-color);
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            display: block;
-            margin: 0 auto 10px;
-        }
-
-        #photoPreview:hover {
-            border-color: var(--primary-color);
-            transform: scale(1.02);
-        }
-
-        .image-hint {
-            display: block;
-            font-size: 14px;
-            color: #aaa;
-            margin-top: 5px;
-        }
-
-        button[type="submit"] {
+        .btn-register {
             background-color: var(--primary-color);
+            border-color: var(--primary-color);
             color: white;
-            border: none;
-            padding: 12px 20px;
+            font-weight: 500;
+            padding: 12px;
             width: 100%;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            border-radius: var(--border-radius);
             margin-top: 10px;
+            transition: var(--transition);
         }
 
-        button[type="submit"]:hover {
-            background-color: #3a56d4;
+        .btn-register:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
         }
 
         .login-link {
-            display: block;
             text-align: center;
             margin-top: 20px;
+        }
+
+        .login-link a {
             color: var(--primary-color);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: var(--transition);
         }
 
-        .login-link:hover {
-            color: #627cff;
+        .login-link a:hover {
+            color: var(--secondary-color);
             text-decoration: underline;
         }
 
-        @media (max-width: 480px) {
-            form {
-                padding: 20px;
-            }
-
-            #photoPreview {
-                width: 150px;
-                height: 150px;
-            }
+        .password-requirements {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
+<div class="register-container">
+    <div class="register-header">
+        <div class="logo-icon">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        <h1>Create Account</h1>
+        <p>Join our task management platform</p>
+    </div>
 
-<form action="/verifiedPage" method="post">
-    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-    <h1>Create Account</h1>
+    <form action="/verifiedPage" method="post">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
-    <input type="text" name="name" placeholder="Username" required><br>
-    <input type="email" name="username" placeholder="Email" required><br>
-    <input type="password" name="password" placeholder="Password" required><br>
-    <input type="password" name="password2" placeholder="Confirm Password" required><br>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Username" required>
+            <label for="name">Username</label>
+        </div>
 
-    <button type="submit">Register</button>
-</form>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="username" name="username" placeholder="name@example.com" required>
+            <label for="username">Email address</label>
+        </div>
 
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            <label for="password">Password</label>
+            <div class="password-requirements">
+                Password should be at least 8 characters long
+            </div>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm Password" required>
+            <label for="password2">Confirm Password</label>
+        </div>
+
+        <button type="submit" class="btn btn-register">
+            <i class="fas fa-user-plus me-2"></i> Register
+        </button>
+    </form>
+
+    <div class="login-link">
+        <p>Already have an account? <a href="/login">Sign in</a></p>
+    </div>
+</div>
 </body>
 </html>
