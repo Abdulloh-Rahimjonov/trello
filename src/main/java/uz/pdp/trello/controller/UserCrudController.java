@@ -1,12 +1,16 @@
 package uz.pdp.trello.controller;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.Transient;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.trello.entity.*;
 import uz.pdp.trello.entity.enums.Roles;
 import uz.pdp.trello.repo.*;
+
+import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -25,29 +29,47 @@ public class UserCrudController {
         return "admin/users";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Integer id) {
+    @Transactional
+    @PostMapping("/delete")
+    public String deleteUser(Model model, @RequestParam int id, Principal principal) {
         try {
+            Optional<User> optionalUser = userRepository.findById(id);
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
 
-            Optional<User> byId = userRepository.findById(id);
-            if (byId.isPresent()) {
-                User user = byId.get();
+                // User bilan bog‘liq barcha tasklarni olib, userni null qilamiz
                 List<Task> tasks = taskRepository.findAll();
                 for (Task task : tasks) {
-                    if (task.getUser().equals(user)) {
+                    if (task.getUser() != null && task.getUser().equals(user)) {
                         task.setUser(null);
                     }
                 }
+
+                // Auth bo‘lgan user
+                User thisUser = userRepository.findByUsername(principal.getName())
+                        .orElseThrow();
+
+                // Faqat agar attachment mavjud bo‘lsa, o‘chiramiz
                 Attachment attachment = user.getAttachment();
-                attachmentRepository.deleteById(attachment.getId());
+                if (attachment != null) {
+                    attachmentRepository.deleteById(attachment.getId());
+                }
+
                 taskRepository.saveAll(tasks);
                 userRepository.deleteById(id);
+
+                if (thisUser.equals(user)) {
+                    return "redirect:/logout";
+                }
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return "redirect:/admin";
         }
+
         return "redirect:/admin";
     }
+
 
     @GetMapping("/change-role/{id}")
     public String changeRolePage(@PathVariable Integer id, Model model) {

@@ -155,7 +155,7 @@
                 <option th:each="user : ${users}"
                         th:value="${user.id}"
                         th:text="${user.name}"
-                        th:selected="${user.id} == ${task.user.id}">
+                        th:selected="${task.user != null} ? ${user.id} == ${task.user.id} : false">
                 </option>
             </select>
         </div>

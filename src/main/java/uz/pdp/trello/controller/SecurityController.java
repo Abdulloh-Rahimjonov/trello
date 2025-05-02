@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class SecurityController {
+public class  SecurityController {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -23,7 +23,7 @@ public class SecurityController {
                                     "/verified",
                                     "/verifiedPage"
                             ).permitAll()
-                            .requestMatchers("/admin**").hasRole("ADMIN")
+                            .requestMatchers("/admin" , "/admin/**").hasRole("ADMIN")
                             .requestMatchers("/status**").hasAnyRole("MAINTAINER","ADMIN")
                             .requestMatchers("/task/addTask**").hasAnyRole("MAINTAINER","ADMIN")
                             .anyRequest().authenticated();

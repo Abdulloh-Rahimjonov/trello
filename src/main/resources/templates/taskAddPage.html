@@ -210,7 +210,7 @@
 
         <div class="mb-4">
             <label for="userId" class="form-label">Assign To</label>
-            <select class="form-select" id="userId" name="userId" required>
+            <select class="form-select" id="userId" name="userId">
                 <option value="">-- Select User --</option>
                 <option th:each="user : ${users}"
                         th:value="${user.id}"
