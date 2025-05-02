@@ -22,23 +22,18 @@ public class StatusController {
     }
 
     @GetMapping("/addStatusPage")
-    public String addStatusPage(@RequestParam Integer maxPosition, Model model) {
-        model.addAttribute("maxPosition", maxPosition);
+    public String addStatusPage( Model model) {
         return "addStatusPage";
     }
 
     @Transactional
     @PostMapping("/addStatus")
-    public String addStatus(@RequestParam Integer maxPosition, @RequestParam String name, Model model) {
+    public String addStatus( @RequestParam String name, Model model) {
         Status status = new Status();
         status.setName(name);
-        int newPositionNumber = maxPosition + 1;
 
-        while (statusRepository.existsByPositionNumber(newPositionNumber)) {
-            newPositionNumber++;
-        }
 
-        status.setPositionNumber(newPositionNumber);
+        status.setPositionNumber(statusRepository.findAll().size()+1);
         status.setIsActive(true);
         statusRepository.save(status);
 

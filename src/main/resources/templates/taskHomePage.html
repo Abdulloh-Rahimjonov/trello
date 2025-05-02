@@ -306,7 +306,6 @@
             </a>
 
             <form sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MAINTAINER')" action="/status/addStatusPage">
-                <input type="hidden" name="maxPosition" th:value="${maxPosition}">
                 <button>
                     <i class="fas fa-plus-circle"></i> Add Status
                 </button>

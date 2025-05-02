@@ -159,11 +159,11 @@
                 </thead>
                 <tbody>
                 <tr th:each="comment : ${task.comments}">
-                    <td class="comment-user" th:text="${comment.user.name}"></td>
+                    <td class="comment-user" th:text="${comment.userName}"></td>
                     <td th:text="${comment.text}"></td>
                     <td class="comment-time" th:text="${#temporals.format(comment.createdAt, 'MM-dd HH:mm')}"></td>
                 </tr>
-                <tr th:if="${task.comments.empty}">
+                <tr th:if="${task.comments.isEmpty()}">
                     <td colspan="3" class="text-center py-4">No comments yet. Be the first to comment!</td>
                 </tr>
                 </tbody>

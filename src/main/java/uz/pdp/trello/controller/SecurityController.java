@@ -23,6 +23,9 @@ public class SecurityController {
                                     "/verified",
                                     "/verifiedPage"
                             ).permitAll()
+                            .requestMatchers("/admin**").hasRole("ADMIN")
+                            .requestMatchers("/status**").hasAnyRole("MAINTAINER","ADMIN")
+                            .requestMatchers("/task/addTask**").hasAnyRole("MAINTAINER","ADMIN")
                             .anyRequest().authenticated();
                 })
                 .formLogin(form ->
