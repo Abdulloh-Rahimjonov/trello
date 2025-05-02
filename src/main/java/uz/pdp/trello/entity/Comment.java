@@ -17,15 +17,9 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private User user;
-
+    private String userName;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
     private String text;
 }

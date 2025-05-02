@@ -102,28 +102,43 @@ public class TaskController {
         model.addAttribute("users" , users);
         return "taskAddPage";
     }
-    @Transactional
+
     @PostMapping("/addTask")
-    public String addTask(@RequestParam Integer userId,
+    @Transactional
+    public String addTask(@RequestParam(required = false) String userId,
                           @RequestParam String title,
                           @RequestParam MultipartFile photo,
                           Model model) throws IOException {
 
-        Optional<User> user = userRepository.findById(userId);
+        User user = null;
+
+        if (userId != null && !userId.isBlank()) {
+            try {
+                int id = Integer.parseInt(userId);
+                user = userRepository.findById(id).orElse(null);
+            } catch (NumberFormatException e) {}
+        }
+
         List<Status> activeOrdered = statusRepository.findActiveOrdered();
+
+        if (activeOrdered.isEmpty()) {return "redirect:/task";}
+
         Status first = activeOrdered.getFirst();
 
-
-        Attachment attachment = new Attachment();
-        attachment.setContent(photo.getBytes());
-        attachment.setFile_type(".jpg");
-        attachmentRepository.save(attachment);
-
         Task task = new Task();
-        task.setUser(user.get());
+        if (user != null) {
+            task.setUser(user);
+        }
         task.setStatus(first);
         task.setTitle(title);
-        task.setAttachment(attachment);
+
+        if (!photo.isEmpty()) {
+            Attachment attachment = new Attachment();
+            attachment.setContent(photo.getBytes());
+            attachment.setFile_type(".jpg");
+            attachmentRepository.save(attachment);
+            task.setAttachment(attachment);
+        }
 
         taskRepository.save(task);
 

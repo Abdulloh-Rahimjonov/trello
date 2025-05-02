@@ -122,9 +122,9 @@
             padding: 0 20px;
         }
 
-        /* Status Columns */
         .status-container {
             display: flex;
+            flex-direction: row;
             gap: 20px;
             margin-top: 20px;
             overflow-x: auto;
@@ -290,7 +290,6 @@
     </style>
 </head>
 <body>
-<!-- Header with Navigation -->
 <header class="app-header">
     <div class="nav-container">
         <div class="user-profile" sec:authorize="isAuthenticated()">
