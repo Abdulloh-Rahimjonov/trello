@@ -26,6 +26,5 @@ public class Runner implements CommandLineRunner {
             all.add(new Role(null, Roles.MAINTAINER.name()));
             roleRepository.saveAll(all);
         }
-        System.out.println(userRepository.findAll().size());
     }
 }
