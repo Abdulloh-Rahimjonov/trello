@@ -40,7 +40,6 @@ public class TaskController {
         User first = userRepository.findAll().getFirst();
         if (first != null && first.getRoles().size() == 1) {
             first.getRoles().add(new Role(null, Roles.ADMIN.name()));
-
             userRepository.save(first);
         }
         List<Task> tasks = taskRepository.findAll();
