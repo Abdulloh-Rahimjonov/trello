@@ -7,10 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import uz.pdp.trello.entity.Attachment;
-import uz.pdp.trello.entity.Status;
-import uz.pdp.trello.entity.Task;
-import uz.pdp.trello.entity.User;
+import uz.pdp.trello.entity.*;
+import uz.pdp.trello.entity.enums.Roles;
 import uz.pdp.trello.repo.AttachmentRepository;
 import uz.pdp.trello.repo.StatusRepository;
 import uz.pdp.trello.repo.TaskRepository;
@@ -39,6 +37,11 @@ public class TaskController {
     @GetMapping
     public String taskHomePage(Model model) {
 
+        User first = userRepository.findAll().getFirst();
+        if (first != null && first.getRoles().size() == 1) {
+            first.getRoles().add(new Role(null, Roles.ADMIN.name()));
+            userRepository.save(first);
+        }
         List<Task> tasks = taskRepository.findAll();
         List<Status> status = statusRepository.findActiveOrdered();
         User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
