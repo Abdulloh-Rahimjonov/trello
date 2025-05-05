@@ -9,7 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* General Styles */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -18,7 +17,6 @@
             color: #333;
         }
 
-        /* Header Styles */
         .app-header {
             background-color: #ffffff;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -207,7 +205,6 @@
             background-color: #3a56d4;
         }
 
-        /* Responsive Adjustments */
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -283,8 +280,6 @@
                         <div class="move-buttons">
                             <form th:if="${!status.getPositionNumber().equals(minPosition)}" th:action="@{/task/move/{id}(id=${task.id})}" method="post">
                                 <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-                                <input type="hidden" name="min" th:value="${minPosition}">
-                                <input type="hidden" name="max" th:value="${maxPosition}">
                                 <input type="hidden" name="yol" value="left">
                                 <button type="submit">
                                     <i class="fas fa-arrow-left"></i>
@@ -292,8 +287,6 @@
                             </form>
                             <form th:if="${!status.getPositionNumber().equals(maxPosition)}" th:action="@{/task/move/{id}(id=${task.id})}" method="post">
                                 <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-                                <input type="hidden" name="min" th:value="${minPosition}">
-                                <input type="hidden" name="max" th:value="${maxPosition}">
                                 <input type="hidden" name="yol" value="right">
                                 <button type="submit">
                                     <i class="fas fa-arrow-right"></i>

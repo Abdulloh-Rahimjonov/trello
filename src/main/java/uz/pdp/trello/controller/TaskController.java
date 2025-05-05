@@ -63,7 +63,7 @@ public class TaskController {
     }
 
     @PostMapping("/move/{id}")
-    public String moveTask(@PathVariable("id") Integer id , @RequestParam Integer min ,@RequestParam Integer max, @RequestParam String yol, Model model) {
+    public String moveTask(@PathVariable("id") Integer id , @RequestParam String yol) {
         Optional<Task> byId = taskRepository.findById(id);
         if (byId.isPresent()) {
             Task task = byId.get();
